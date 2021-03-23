@@ -10,7 +10,7 @@ namespace message
 {
     public class Message
     {
-        public string type; // the types are : connect, room_create, room_change, send_content, error
+        public string type;
         public string content;
         public string room_name;
 
