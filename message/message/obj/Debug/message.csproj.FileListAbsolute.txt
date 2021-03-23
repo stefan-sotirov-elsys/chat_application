@@ -1,0 +1,5 @@
+C:\Stefan\chat_application\message\message\bin\Debug\message.dll
+C:\Stefan\chat_application\message\message\bin\Debug\message.pdb
+C:\Stefan\chat_application\message\message\obj\Debug\message.csprojResolveAssemblyReference.cache
+C:\Stefan\chat_application\message\message\obj\Debug\message.dll
+C:\Stefan\chat_application\message\message\obj\Debug\message.pdb
