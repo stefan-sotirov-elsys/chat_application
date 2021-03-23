@@ -1,0 +1,7 @@
+C:\Stefan\chat_application\server\server\obj\x86\Debug\server.csprojResolveAssemblyReference.cache
+C:\Stefan\chat_application\server\server\bin\Debug\server.exe
+C:\Stefan\chat_application\server\server\bin\Debug\server.pdb
+C:\Stefan\chat_application\server\server\bin\Debug\message.dll
+C:\Stefan\chat_application\server\server\bin\Debug\message.pdb
+C:\Stefan\chat_application\server\server\obj\x86\Debug\server.exe
+C:\Stefan\chat_application\server\server\obj\x86\Debug\server.pdb
