@@ -1,2 +1,2 @@
-# chat_application
-fast and lightweight chat application but it's subjective
+#chat_application
+fast and lightweight application but it's subjective
