@@ -34,10 +34,11 @@ namespace message
         {
             MemoryStream memory_stream = new MemoryStream();
             BinaryFormatter binary_formatter = new BinaryFormatter();
+            Message message;
 
             memory_stream.Write(bytes, 0, bytes.Length);
             memory_stream.Seek(0, SeekOrigin.Begin);
-            Message message = (Message)binary_formatter.Deserialize(memory_stream);
+            message = (Message)binary_formatter.Deserialize(memory_stream);
             return message;
         }
     }
