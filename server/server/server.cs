@@ -43,14 +43,25 @@ namespace server
             // handle the established connections
             while (true)
             {
-                byte[] recieved_bytes = new byte[256]; // should be enough I guess
+                byte[] received_bytes = new byte[256]; // should be enough I guess
+                Thread thread = new Thread(new ParameterizedThreadStart(handle_message_thread_wrapper));
+                Message message = Message.byte_array_to_message(received_bytes);
+                object handle_message_args = new object[2] {message, accepter_sockets[accepter_sockets.Count - 1]};
 
                 accepter_sockets.Add(listener_socket.Accept());
-                accepter_sockets[accepter_sockets.Count - 1].Receive(recieved_bytes);
+                accepter_sockets[accepter_sockets.Count - 1].Receive(received_bytes);
 
-                Message message = Message.byte_array_to_message(recieved_bytes); // for some reason I just can't fucking cast it
-                handle_message(message, accepter_sockets[accepter_sockets.Count - 1]);
+                thread.Start(handle_message_args);
             }
+        }
+
+        void handle_message_thread_wrapper(object args)
+        {
+            Array args_array = (Array)args;
+            Message message = (Message)args_array.GetValue(0);
+            Socket current_socket = (Socket)args_array.GetValue(1);
+
+            handle_message(message, current_socket);
         }
 
         void handle_message(Message message, Socket current_socket)
