@@ -33,23 +33,22 @@ namespace server
             Socket listener_socket = new Socket(server_ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             List<Socket> accepter_sockets = new List<Socket>();
 
-            // start the server
             listener_socket.Bind(local_end_point);
             Console.WriteLine("server started successfully");
 
-            // listen for connections
             listener_socket.Listen(100);
 
-            // handle the established connections
             while (true)
             {
-                byte[] received_bytes = new byte[256]; // should be enough I guess
+                byte[] received_bytes = new byte[256];
                 Thread thread = new Thread(new ParameterizedThreadStart(handle_message_thread_wrapper));
                 Message message = Message.byte_array_to_message(received_bytes);
-                object handle_message_args = new object[2] {message, accepter_sockets[accepter_sockets.Count - 1]};
+                object handle_message_args;
 
                 accepter_sockets.Add(listener_socket.Accept());
                 accepter_sockets[accepter_sockets.Count - 1].Receive(received_bytes);
+
+                handle_message_args = new object[2] { message, accepter_sockets[accepter_sockets.Count - 1] };
 
                 thread.Start(handle_message_args);
             }
@@ -66,6 +65,8 @@ namespace server
 
         void handle_message(Message message, Socket current_socket)
         {
+            Message new_message;
+
             switch (message.type)
             {
                 case "connect":
@@ -80,8 +81,6 @@ namespace server
                     break;
 
                 case "room_join":
-                    Message new_message;
-
                     if (chat_rooms.ContainsKey(message.content))
                     {
                         chat_rooms[message.content].connections.Add(current_socket);
