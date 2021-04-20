@@ -41,13 +41,15 @@ namespace server
             while (true)
             {
                 byte[] received_bytes = new byte[256];
-                Thread thread = new Thread(new ParameterizedThreadStart(handle_message_thread_wrapper));
-                Message message = Message.byte_array_to_message(received_bytes);
+                Message message;
                 object handle_message_args;
+                Thread thread = new Thread(new ParameterizedThreadStart(handle_message_thread_wrapper));
 
                 accepter_sockets.Add(listener_socket.Accept());
                 accepter_sockets[accepter_sockets.Count - 1].Receive(received_bytes);
 
+                message = Message.byte_array_to_message(received_bytes);
+                
                 handle_message_args = new object[2] { message, accepter_sockets[accepter_sockets.Count - 1] };
 
                 thread.Start(handle_message_args);
