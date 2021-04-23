@@ -5,3 +5,12 @@ C:\Stefan\chat_application\server\server\bin\Debug\message.dll
 C:\Stefan\chat_application\server\server\bin\Debug\message.pdb
 C:\Stefan\chat_application\server\server\obj\x86\Debug\server.exe
 C:\Stefan\chat_application\server\server\obj\x86\Debug\server.pdb
+C:\Users\NBT_2\Stefan\chat_application\server\server\bin\Debug\server.exe
+C:\Users\NBT_2\Stefan\chat_application\server\server\bin\Debug\server.pdb
+C:\Users\NBT_2\Stefan\chat_application\server\server\bin\Debug\message.dll
+C:\Users\NBT_2\Stefan\chat_application\server\server\bin\Debug\message.pdb
+C:\Users\NBT_2\Stefan\chat_application\server\server\obj\x86\Debug\server.csprojAssemblyReference.cache
+C:\Users\NBT_2\Stefan\chat_application\server\server\obj\x86\Debug\server.csproj.CoreCompileInputs.cache
+C:\Users\NBT_2\Stefan\chat_application\server\server\obj\x86\Debug\server.csproj.CopyComplete
+C:\Users\NBT_2\Stefan\chat_application\server\server\obj\x86\Debug\server.exe
+C:\Users\NBT_2\Stefan\chat_application\server\server\obj\x86\Debug\server.pdb

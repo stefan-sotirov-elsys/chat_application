@@ -11,7 +11,7 @@ namespace server
         static void Main(string[] args)
         {
             IPHostEntry host = Dns.GetHostEntry("localhost");
-            IPAddress ip = host.AddressList[0];
+            IPAddress ip = host.AddressList[1];
 
             Server server = new Server(ip, 13000);
             server.start();

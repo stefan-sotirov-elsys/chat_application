@@ -31,7 +31,6 @@ namespace server
         public void start()
         {
             Socket listener_socket = new Socket(server_ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            List<Socket> accepter_sockets = new List<Socket>();
 
             listener_socket.Bind(local_end_point);
             Console.WriteLine("server started successfully");
@@ -40,29 +39,35 @@ namespace server
 
             while (true)
             {
-                byte[] received_bytes = new byte[256];
-                Message message;
-                object handle_message_args;
-                Thread thread = new Thread(new ParameterizedThreadStart(handle_message_thread_wrapper));
+                Thread thread = new Thread(new ParameterizedThreadStart(handle_connection));
+                Socket accepter_socket;
 
-                accepter_sockets.Add(listener_socket.Accept());
-                accepter_sockets[accepter_sockets.Count - 1].Receive(received_bytes);
+                accepter_socket = listener_socket.Accept();
 
-                message = Message.byte_array_to_message(received_bytes);
-                
-                handle_message_args = new object[2] { message, accepter_sockets[accepter_sockets.Count - 1] };
-
-                thread.Start(handle_message_args);
+                thread.Start(accepter_socket);
             }
         }
 
-        void handle_message_thread_wrapper(object args)
+        void handle_connection(object current_socket)
         {
-            Array args_array = (Array)args;
-            Message message = (Message)args_array.GetValue(0);
-            Socket current_socket = (Socket)args_array.GetValue(1);
+            byte[] buf = new byte[256];
+            Message message;
 
-            handle_message(message, current_socket);
+            while (true)
+            {
+                ((Socket)current_socket).Receive(buf);
+
+                message = Message.byte_array_to_message(buf);
+
+                if (message.type == "disconnect")
+                {
+                    return;
+                }
+                else
+                {
+                    handle_message(message, (Socket)current_socket);
+                }
+            }
         }
 
         void handle_message(Message message, Socket current_socket)
@@ -97,7 +102,7 @@ namespace server
                     break;
 
                 case "send_content":
-                    if (chat_rooms.ContainsKey(message.room_name)) // will move this check in the client app(or remove it completely)
+                    if (chat_rooms.ContainsKey(message.room_name))
                     {
                         chat_rooms[message.room_name].send_message(message);
                     }

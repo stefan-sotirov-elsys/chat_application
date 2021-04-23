@@ -15,6 +15,8 @@ namespace server
         public ChatRoom(string name)
         {
             this.name = name;
+
+            connections = new List<Socket>();
         }
 
         public void send_message(Message message)
