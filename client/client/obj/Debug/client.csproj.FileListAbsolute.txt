@@ -1,0 +1,14 @@
+C:\Users\NBT_2\Stefan\chat_application\client\client\bin\Debug\client.exe.config
+C:\Users\NBT_2\Stefan\chat_application\client\client\bin\Debug\client.exe
+C:\Users\NBT_2\Stefan\chat_application\client\client\bin\Debug\client.pdb
+C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.csprojAssemblyReference.cache
+C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.client_name_prompt.resources
+C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.Properties.Resources.resources
+C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.csproj.GenerateResource.cache
+C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.csproj.CoreCompileInputs.cache
+C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.exe
+C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.pdb
+C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.client_user_interface.resources
+C:\Users\NBT_2\Stefan\chat_application\client\client\bin\Debug\message.dll
+C:\Users\NBT_2\Stefan\chat_application\client\client\bin\Debug\message.pdb
+C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.csproj.CopyComplete
