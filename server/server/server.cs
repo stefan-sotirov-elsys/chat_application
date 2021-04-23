@@ -59,13 +59,13 @@ namespace server
 
                 message = Message.byte_array_to_message(buf);
 
-                if (message.type == "disconnect")
+                if (message.type != "disconnect")
                 {
-                    return;
+                    handle_message(message, (Socket)current_socket);
                 }
                 else
                 {
-                    handle_message(message, (Socket)current_socket);
+                    return;
                 }
             }
         }
