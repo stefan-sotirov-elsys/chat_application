@@ -3,3 +3,9 @@ C:\Stefan\chat_application\message\message\bin\Debug\message.pdb
 C:\Stefan\chat_application\message\message\obj\Debug\message.csprojResolveAssemblyReference.cache
 C:\Stefan\chat_application\message\message\obj\Debug\message.dll
 C:\Stefan\chat_application\message\message\obj\Debug\message.pdb
+C:\Users\NBT_2\Stefan\chat_application\message\message\bin\Debug\message.dll
+C:\Users\NBT_2\Stefan\chat_application\message\message\bin\Debug\message.pdb
+C:\Users\NBT_2\Stefan\chat_application\message\message\obj\Debug\message.csprojAssemblyReference.cache
+C:\Users\NBT_2\Stefan\chat_application\message\message\obj\Debug\message.csproj.CoreCompileInputs.cache
+C:\Users\NBT_2\Stefan\chat_application\message\message\obj\Debug\message.dll
+C:\Users\NBT_2\Stefan\chat_application\message\message\obj\Debug\message.pdb

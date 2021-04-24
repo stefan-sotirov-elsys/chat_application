@@ -49,9 +49,9 @@ namespace client
             this.client_name_label.AutoSize = true;
             this.client_name_label.Location = new System.Drawing.Point(32, 74);
             this.client_name_label.Name = "client_name_label";
-            this.client_name_label.Size = new System.Drawing.Size(117, 13);
+            this.client_name_label.Size = new System.Drawing.Size(119, 13);
             this.client_name_label.TabIndex = 1;
-            this.client_name_label.Text = "Please input your name";
+            this.client_name_label.Text = "Please insert your name";
             // 
             // client_name_submit
             // 

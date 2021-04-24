@@ -22,7 +22,7 @@ namespace client
         private void client_user_interface_Load(object sender, EventArgs e)
         {
             IPHostEntry host = Dns.GetHostEntry("localhost"); // note(Stefan): Only for testing
-            IPAddress ip = host.AddressList[0];
+            IPAddress ip = host.AddressList[1]; // new IPAddress(new byte[] { (byte)10, (byte)0, (byte)0, (byte)26 });
 
             Global.client.remote_end_point = new IPEndPoint(ip, 13000);
             Global.client.socket = new Socket(Global.client.remote_end_point.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -31,9 +31,9 @@ namespace client
             {
                 Global.client.connect(Global.client.remote_end_point);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Cannot connect to the server at this time");
+                MessageBox.Show("Cannot connect to the server at this time: " + ex.Message);
                 this.Close();
             }
         }

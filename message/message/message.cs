@@ -8,6 +8,7 @@ using System.IO;
 
 namespace message
 {
+    [Serializable]
     public class Message
     {
         public string type;
