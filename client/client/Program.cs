@@ -17,7 +17,7 @@ namespace client
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new client_name_prompt());
-            Application.Run(new client_user_interface());
+            Application.Run(new client_join_or_create_chat_room());
         }
     }
 

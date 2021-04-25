@@ -12,9 +12,9 @@ using System.Net.Sockets;
 
 namespace client
 {
-    public partial class client_user_interface : Form
+    public partial class client_join_or_create_chat_room : Form
     {
-        public client_user_interface()
+        public client_join_or_create_chat_room()
         {
             InitializeComponent();
         }
@@ -22,7 +22,7 @@ namespace client
         private void client_user_interface_Load(object sender, EventArgs e)
         {
             IPHostEntry host = Dns.GetHostEntry("localhost"); // note(Stefan): Only for testing
-            IPAddress ip = host.AddressList[1]; // new IPAddress(new byte[] { (byte)10, (byte)0, (byte)0, (byte)26 });
+            IPAddress ip = host.AddressList[1];
 
             Global.client.remote_end_point = new IPEndPoint(ip, 13000);
             Global.client.socket = new Socket(Global.client.remote_end_point.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -31,9 +31,9 @@ namespace client
             {
                 Global.client.connect(Global.client.remote_end_point);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                MessageBox.Show("Cannot connect to the server at this time: " + ex.Message);
+                MessageBox.Show(exception.Message);
                 this.Close();
             }
         }

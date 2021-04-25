@@ -27,9 +27,9 @@ namespace client
             {
                 socket.Connect(remote_end_point);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                throw ex;
+                throw exception;
             }
             
             socket.Send(Message.message_to_byte_array(message));
