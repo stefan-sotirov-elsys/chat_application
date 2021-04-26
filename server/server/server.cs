@@ -55,18 +55,21 @@ namespace server
 
             while (true)
             {
-                ((Socket)current_socket).Receive(buf);
+                try
+                {
+                    ((Socket)current_socket).Receive(buf);
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception.Message);
+
+                    return;
+                }
 
                 message = Message.byte_array_to_message(buf);
 
-                if (message.type != "disconnect")
-                {
-                    handle_message(message, (Socket)current_socket);
-                }
-                else
-                {
-                    return;
-                }
+                
+                handle_message(message, (Socket)current_socket);
             }
         }
 
@@ -81,36 +84,32 @@ namespace server
 
                     break;
 
-                case "room_create":
+                case "create_room":
                     chat_rooms.Add(message.content, new ChatRoom(message.content));
-                    Console.WriteLine("created chat room: " + message.content);
+                    Console.WriteLine("chat room has been created: " + message.content);
 
                     break;
 
-                case "room_join":
+                case "join_room":
                     if (chat_rooms.ContainsKey(message.content))
                     {
                         chat_rooms[message.content].connections.Add(current_socket);
-                        new_message = new Message("success", null, null);
-                    }
-                    else
-                    {
-                        new_message = new Message("error", "chat room doesn't exist", null);
-                    }
-                    current_socket.Send(Message.message_to_byte_array(new_message));
-
-                    break;
-
-                case "send_content":
-                    if (chat_rooms.ContainsKey(message.room_name))
-                    {
-                        chat_rooms[message.room_name].send_message(message);
                     }
                     else
                     {
                         new_message = new Message("error", "chat room doesn't exist", null);
                         current_socket.Send(Message.message_to_byte_array(new_message));
                     }
+
+                    break;
+
+                case "leave_room":
+                    chat_rooms[message.content].connections.Remove(current_socket);
+
+                    break;
+
+                case "content":
+                    chat_rooms[message.room_name].send_message(message);
 
                     break;
 

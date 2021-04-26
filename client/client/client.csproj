@@ -50,25 +50,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="client.cs" />
+    <Compile Include="client_chat_room_interface.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="client_chat_room_interface.Designer.cs">
+      <DependentUpon>client_chat_room_interface.cs</DependentUpon>
+    </Compile>
     <Compile Include="client_name_prompt.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="client_name_prompt.Designer.cs">
       <DependentUpon>client_name_prompt.cs</DependentUpon>
     </Compile>
-    <Compile Include="client_user_interface.cs">
+    <Compile Include="client_join_or_create_chat_room.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="client_user_interface.Designer.cs">
-      <DependentUpon>client_user_interface.cs</DependentUpon>
+    <Compile Include="client_join_or_create_chat_room.Designer.cs">
+      <DependentUpon>client_join_or_create_chat_room.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="client_chat_room_interface.resx">
+      <DependentUpon>client_chat_room_interface.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="client_name_prompt.resx">
       <DependentUpon>client_name_prompt.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="client_user_interface.resx">
-      <DependentUpon>client_user_interface.cs</DependentUpon>
+    <EmbeddedResource Include="client_join_or_create_chat_room.resx">
+      <DependentUpon>client_join_or_create_chat_room.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

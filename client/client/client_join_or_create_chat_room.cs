@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
+using message;
 
 namespace client
 {
@@ -19,22 +20,55 @@ namespace client
             InitializeComponent();
         }
 
-        private void client_user_interface_Load(object sender, EventArgs e)
+        string mode;
+
+        private void create_room_button_Click(object sender, EventArgs e)
         {
-            IPHostEntry host = Dns.GetHostEntry("localhost"); // note(Stefan): Only for testing
-            IPAddress ip = host.AddressList[1];
+            mode = "create_room";
 
-            Global.client.remote_end_point = new IPEndPoint(ip, 13000);
-            Global.client.socket = new Socket(Global.client.remote_end_point.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            this.create_room_button.BackColor = Color.AntiqueWhite;
+            this.join_room_button.BackColor = default(Color);
+            this.join_room_button.UseVisualStyleBackColor = true;
+        }
 
-            try
+        private void join_room_button_Click(object sender, EventArgs e)
+        {
+            mode = "join_room";
+
+            this.join_room_button.BackColor = Color.AntiqueWhite;
+            this.create_room_button.BackColor = default(Color);
+            this.create_room_button.UseVisualStyleBackColor = true;
+        }
+
+        private void submit_button_Click(object sender, EventArgs e)
+        {
+            if (this.create_or_join_room_text_box.Text != "")
             {
-                Global.client.connect(Global.client.remote_end_point);
+                if (mode != null)
+                {
+                    message.Message new_message = new message.Message(mode, this.create_or_join_room_text_box.Text, null);
+
+                    Global.client.socket.Send(message.Message.message_to_byte_array(new_message));
+
+                    if (mode == "create_room")
+                    {
+                        new_message.type = "join_room";
+
+                        Global.client.socket.Send(message.Message.message_to_byte_array(new_message));
+                    }
+
+                    Global.client.current_chat_room = this.create_or_join_room_text_box.Text;
+
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Please choose an action");
+                }
             }
-            catch (Exception exception)
+            else
             {
-                MessageBox.Show(exception.Message);
-                this.Close();
+                MessageBox.Show("Please insert a room code");
             }
         }
     }

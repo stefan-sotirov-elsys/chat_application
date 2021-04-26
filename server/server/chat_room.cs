@@ -9,12 +9,12 @@ namespace server
 {
     class ChatRoom
     {
-        public string name;
+        public string room_code;
         public List<Socket> connections;
 
-        public ChatRoom(string name)
+        public ChatRoom(string room_code)
         {
-            this.name = name;
+            this.room_code = room_code;
 
             connections = new List<Socket>();
         }
@@ -29,7 +29,5 @@ namespace server
                 connections[i].Send(data);
             }
         }
-
-        
     }
 }

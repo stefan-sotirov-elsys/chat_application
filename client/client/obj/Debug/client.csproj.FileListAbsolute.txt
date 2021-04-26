@@ -8,7 +8,8 @@ C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.csproj.Gen
 C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.csproj.CoreCompileInputs.cache
 C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.exe
 C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.pdb
-C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.client_user_interface.resources
 C:\Users\NBT_2\Stefan\chat_application\client\client\bin\Debug\message.dll
 C:\Users\NBT_2\Stefan\chat_application\client\client\bin\Debug\message.pdb
 C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.csproj.CopyComplete
+C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.client_join_or_create_chat_room.resources
+C:\Users\NBT_2\Stefan\chat_application\client\client\obj\Debug\client.client_chat_room_interface.resources

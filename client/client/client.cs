@@ -31,7 +31,7 @@ namespace client
             {
                 throw exception;
             }
-            
+
             socket.Send(Message.message_to_byte_array(message));
         }
     }

@@ -21,20 +21,32 @@ namespace client
 
         private void client_name_prompt_Load(object sender, EventArgs e)
         {
+            IPHostEntry host = Dns.GetHostEntry("localhost"); // note(Stefan): Only for testing
+            IPAddress ip = host.AddressList[1];
 
+            Global.client.remote_end_point = new IPEndPoint(ip, 13000);
+            Global.client.socket = new Socket(Global.client.remote_end_point.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+            try
+            {
+                Global.client.connect(Global.client.remote_end_point);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+                this.Close();
+            }
         }
 
         private void client_name_submit_Click(object sender, EventArgs e)
         {
-            string name;
-
             if (this.client_name_text_box.Text == "")
             {
                 MessageBox.Show("You have not inserted a name. Please insert a name in the text field");
             }
             else
             {
-                name = this.client_name_text_box.Text;
+                string name = this.client_name_text_box.Text;
 
                 Global.client.client_name = name;
 
