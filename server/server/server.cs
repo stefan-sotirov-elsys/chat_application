@@ -12,30 +12,34 @@ namespace server
     {
         IPAddress server_ip;
         int port_number;
+        int max_message_size;
         IPEndPoint local_end_point;
         Dictionary<string, ChatRoom> chat_rooms;
+        Queue<Message> gateway_buffer = new Queue<Message>(); // serves as a communication point between the interface and this class
 
-        public Server(IPAddress server_ip, int port_number)
+        public Server(IPAddress server_ip, int port_number, int max_message_size)
         {
             if (server_ip == null)
             {
-                throw new ArgumentNullException("server_ip");
+                throw new ArgumentNullException();
             }
 
             this.server_ip = server_ip;
             this.port_number = port_number;
+            this.max_message_size = max_message_size;
             local_end_point = new IPEndPoint(server_ip, port_number);
             chat_rooms = new Dictionary<string, ChatRoom>();
         }
 
-        public void start()
+        public void start(int listener_socket_backlog)
         {
             Socket listener_socket = new Socket(server_ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
             listener_socket.Bind(local_end_point);
-            Console.WriteLine("server started successfully");
 
-            listener_socket.Listen(100);
+            gateway_buffer.Enqueue(new Message("success", "server started successfully", null));
+
+            listener_socket.Listen(listener_socket_backlog);
 
             while (true)
             {
@@ -50,7 +54,7 @@ namespace server
 
         void handle_connection(object current_socket)
         {
-            byte[] buf = new byte[256];
+            byte[] buf = new byte[max_message_size];
             Message message;
 
             while (true)
@@ -80,13 +84,21 @@ namespace server
             switch (message.type)
             {
                 case "connect":
-                    Console.WriteLine("new connection from " + message.content);
+                    gateway_buffer.Enqueue(new Message("success", "new connection from " + message.content, null));
 
                     break;
 
                 case "create_room":
-                    chat_rooms.Add(message.content, new ChatRoom(message.content));
-                    Console.WriteLine("chat room has been created: " + message.content);
+                    if (chat_rooms.ContainsKey(message.content))
+                    {
+                        new_message = new Message("error", "chat room already exists", message.content);
+                        current_socket.Send(Message.message_to_byte_array(new_message));
+                    }
+                    else
+                    {
+                        chat_rooms.Add(message.content, new ChatRoom(message.content));
+                        gateway_buffer.Enqueue(new Message("success", "chat room has been created: " + message.content, null));
+                    }
 
                     break;
 
@@ -103,21 +115,26 @@ namespace server
 
                     break;
 
-                case "leave_room":
-                    chat_rooms[message.content].connections.Remove(current_socket);
-
-                    break;
-
                 case "content":
                     chat_rooms[message.room_name].send_message(message);
 
                     break;
 
                 case "error":
-                    Console.WriteLine("error: " + message.content);
+                    gateway_buffer.Enqueue(new Message("error", "error: " + message.content, null));
                     
                     break;
             }
+        }
+
+        public Message get_message()
+        {
+            while (gateway_buffer.Count == 0)
+            {
+                ;
+            }
+
+            return gateway_buffer.Dequeue();
         }
     }
 }

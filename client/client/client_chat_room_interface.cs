@@ -44,12 +44,17 @@ namespace client
                     case "error":
                         MessageBox.Show(received_message.content);
 
+                        if (received_message.room_name == Global.client.room_code)
+                        {
+                            Global.client.room_code = null;
+                        }
+
                         this.Close();
 
                         break;
 
                     case "content":
-                        this.text_screen.Text += received_message.content + '\n';
+                        this.text_screen.Text += received_message.content + Environment.NewLine;
 
                         break;
                 }
@@ -60,7 +65,7 @@ namespace client
         {
             string content = Global.client.client_name + ": " + this.content_input.Text;
 
-            message.Message new_message = new message.Message("content", content, Global.client.current_chat_room);
+            message.Message new_message = new message.Message("content", content, Global.client.room_code);
 
             this.content_input.Clear();
 
@@ -69,8 +74,6 @@ namespace client
 
         private void change_room_Click(object sender, EventArgs e)
         {
-            Global.client.current_chat_room = null;
-
             this.Close();
         }
     }

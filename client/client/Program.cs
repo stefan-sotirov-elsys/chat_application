@@ -25,21 +25,14 @@ namespace client
                 Application.Run(new client_join_or_create_chat_room());
             }
 
-            if (Global.client.current_chat_room != null)
+            if (Global.client.room_code != null)
             {
                 Application.Run(new client_chat_room_interface());
             }
 
-            if (Global.client.current_chat_room != null)
+            if (Global.client.room_code == null)
             {
-                message.Message message = new message.Message("leave_room", Global.client.current_chat_room, null);
-            }
-            else
-            {
-                if (Global.client.client_name != null)
-                {
-                    goto set_chat_room;
-                }
+                goto set_chat_room;
             }
         }
     }

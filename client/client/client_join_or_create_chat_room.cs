@@ -57,7 +57,7 @@ namespace client
                         Global.client.socket.Send(message.Message.message_to_byte_array(new_message));
                     }
 
-                    Global.client.current_chat_room = this.create_or_join_room_text_box.Text;
+                    Global.client.room_code = this.create_or_join_room_text_box.Text;
 
                     this.Close();
                 }

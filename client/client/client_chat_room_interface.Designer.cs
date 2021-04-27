@@ -40,6 +40,7 @@ namespace client
             this.text_screen.Location = new System.Drawing.Point(30, 48);
             this.text_screen.Multiline = true;
             this.text_screen.Name = "text_screen";
+            this.text_screen.ReadOnly = true;
             this.text_screen.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.text_screen.Size = new System.Drawing.Size(490, 203);
             this.text_screen.TabIndex = 0;

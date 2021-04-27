@@ -13,13 +13,13 @@ namespace message
     {
         public string type;
         public string content;
-        public string room_name;
+        public string room_code;
 
-        public Message(string type, string content, string room_name)
+        public Message(string type, string content, string room_code)
         {
             this.type = type;
             this.content = content;
-            this.room_name = room_name;
+            this.room_code = room_code;
         }
 
         public static byte[] message_to_byte_array(Message message)
