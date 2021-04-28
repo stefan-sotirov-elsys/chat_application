@@ -49,6 +49,8 @@ namespace client
                             Global.client.room_code = null;
                         }
 
+
+
                         this.Close();
 
                         break;

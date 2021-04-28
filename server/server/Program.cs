@@ -25,7 +25,7 @@ namespace server
         {
             while (true)
             {
-                Message received_message = ((Server)(server)).get_message();
+                Message received_message = ((Server)(server)).accept_message();
 
                 Console.WriteLine(received_message.content);
             }

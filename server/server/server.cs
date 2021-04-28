@@ -15,7 +15,7 @@ namespace server
         int max_message_size;
         IPEndPoint local_end_point;
         Dictionary<string, ChatRoom> chat_rooms;
-        Queue<Message> gateway_buffer = new Queue<Message>(); // serves as a communication point between the interface and this class
+        Queue<Message> gateway_buffer; // serves as a communication point between the interface and this class
 
         public Server(IPAddress server_ip, int port_number, int max_message_size)
         {
@@ -29,6 +29,7 @@ namespace server
             this.max_message_size = max_message_size;
             local_end_point = new IPEndPoint(server_ip, port_number);
             chat_rooms = new Dictionary<string, ChatRoom>();
+            gateway_buffer = new Queue<Message>();
         }
 
         public void start(int listener_socket_backlog)
@@ -84,7 +85,7 @@ namespace server
             switch (message.type)
             {
                 case "connect":
-                    gateway_buffer.Enqueue(new Message("success", "new connection from " + message.content, null));
+                    gateway_buffer.Enqueue(new Message("success", "new connection from " + ((IPEndPoint)(current_socket.RemoteEndPoint)).Address, null));
 
                     break;
 
@@ -103,9 +104,12 @@ namespace server
                     break;
 
                 case "join_room":
-                    if (chat_rooms.ContainsKey(message.content))
+                    if (chat_rooms.ContainsKey(message.room_code))
                     {
                         chat_rooms[message.content].connections.Add(current_socket);
+
+                        new_message = new Message("success", message.content + "joined the room", message.room_code);
+                        current_socket.Send(Message.message_to_byte_array(new_message));
                     }
                     else
                     {
@@ -116,7 +120,7 @@ namespace server
                     break;
 
                 case "content":
-                    chat_rooms[message.room_name].send_message(message);
+                    chat_rooms[message.room_code].send_message(message);
 
                     break;
 
@@ -127,11 +131,11 @@ namespace server
             }
         }
 
-        public Message get_message()
+        public Message accept_message()
         {
             while (gateway_buffer.Count == 0)
             {
-                ;
+                Thread.Sleep(1000);
             }
 
             return gateway_buffer.Dequeue();

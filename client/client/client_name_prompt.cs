@@ -24,12 +24,11 @@ namespace client
             IPHostEntry host = Dns.GetHostEntry("localhost"); // note(Stefan): Only for testing
             IPAddress ip = host.AddressList[1];
 
-            Global.client.remote_end_point = new IPEndPoint(ip, 13000);
-            Global.client.socket = new Socket(Global.client.remote_end_point.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint server_endpoint = new IPEndPoint(ip, 13000);
 
             try
             {
-                Global.client.connect(Global.client.remote_end_point);
+                Global.client.connect(server_endpoint);
             }
             catch (Exception exception)
             {
@@ -49,6 +48,8 @@ namespace client
                 string name = this.client_name_text_box.Text;
 
                 Global.client.client_name = name;
+
+                Global.next_form = 1;
 
                 this.Close();
             }

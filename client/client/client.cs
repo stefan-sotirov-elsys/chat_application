@@ -16,15 +16,18 @@ namespace client
     {
         public string client_name;
         public string room_code;
-        public IPEndPoint remote_end_point;
-        public Socket socket;
-        public Queue<Message> gateway_buffer = new Queue<Message>(); // serves as a communication point between this class and the user interface
+        Socket socket;
+        Queue<Message> gateway_buffer; // serves as a communication point between this class and the user interface
+
+        public Client()
+        {
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            gateway_buffer = new Queue<Message>();
+        }
 
         public void connect(IPEndPoint remote_end_point)
         {
-            IPHostEntry host = Dns.GetHostEntry("localhost");
-            IPAddress local_ip = host.AddressList[1];
-            Message message = new Message("connect", local_ip.ToString(), null);
+            Message message;
 
             try
             {
@@ -35,17 +38,29 @@ namespace client
                 throw exception;
             }
 
+            message = new Message("connect", null, null);
+
             socket.Send(Message.message_to_byte_array(message));
         }
 
-        public void send_message(string type, string content, string room_code)
+        public void send_message(Message new_message)
         {
-            Message new_message = new Message(type, content, room_code);
-
             socket.Send(Message.message_to_byte_array(new_message));
         }
 
-        public void receive_messages()
+        public Message receive_message()
+        {
+            byte[] received_bytes = new byte[256];
+            Message received_message;
+
+            socket.Receive(received_bytes);
+
+            received_message = Message.byte_array_to_message(received_bytes);
+
+            return received_message;
+        }
+
+        public void listen_for_messages()
         {
             byte[] received_bytes = new byte[256];
             Message received_message;
@@ -60,11 +75,11 @@ namespace client
             }
         }
 
-        public Message get_message()
+        public Message accept_message()
         {
             while (gateway_buffer.Count == 0)
             {
-                ;
+                Thread.Sleep(1000);
             }
 
             return gateway_buffer.Dequeue();

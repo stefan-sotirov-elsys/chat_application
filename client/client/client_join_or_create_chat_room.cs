@@ -28,6 +28,7 @@ namespace client
 
             this.create_room_button.BackColor = Color.AntiqueWhite;
             this.join_room_button.BackColor = default(Color);
+
             this.join_room_button.UseVisualStyleBackColor = true;
         }
 
@@ -37,6 +38,7 @@ namespace client
 
             this.join_room_button.BackColor = Color.AntiqueWhite;
             this.create_room_button.BackColor = default(Color);
+
             this.create_room_button.UseVisualStyleBackColor = true;
         }
 
@@ -46,18 +48,27 @@ namespace client
             {
                 if (mode != null)
                 {
-                    message.Message new_message = new message.Message(mode, this.create_or_join_room_text_box.Text, null);
-
-                    Global.client.socket.Send(message.Message.message_to_byte_array(new_message));
+                    message.Message new_message = new message.Message(mode, Global.client.client_name, this.create_or_join_room_text_box.Text);
+                    Global.client.send_message(new_message);
 
                     if (mode == "create_room")
                     {
                         new_message.type = "join_room";
+                        Global.client.send_message(new_message);
+                    }
 
-                        Global.client.socket.Send(message.Message.message_to_byte_array(new_message));
+                    new_message = Global.client.receive_message();
+
+                    if (new_message.type == "error")
+                    {
+                        MessageBox.Show(new_message.content);
+
+                        this.Close();
                     }
 
                     Global.client.room_code = this.create_or_join_room_text_box.Text;
+
+                    Global.next_form = 2;
 
                     this.Close();
                 }

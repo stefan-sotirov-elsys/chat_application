@@ -19,20 +19,9 @@ namespace client
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new client_name_prompt());
 
-            set_chat_room:
-            if (Global.client.client_name != null)
+            if (Global.next_form == 1)
             {
                 Application.Run(new client_join_or_create_chat_room());
-            }
-
-            if (Global.client.room_code != null)
-            {
-                Application.Run(new client_chat_room_interface());
-            }
-
-            if (Global.client.room_code == null)
-            {
-                goto set_chat_room;
             }
         }
     }
@@ -40,5 +29,6 @@ namespace client
     static class Global
     {
         public static Client client = new Client();
+        public static int next_form = 0;
     }
 }
