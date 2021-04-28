@@ -17,11 +17,23 @@ namespace client
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new client_name_prompt());
 
-            if (Global.next_form == 1)
+            switch (Global.next_form)
             {
-                Application.Run(new client_join_or_create_chat_room());
+                case 0:
+                    Application.Run(new client_name_prompt());
+
+                    break;
+
+                case 1:
+                    Application.Run(new client_join_or_create_chat_room());
+
+                    break;
+
+                case 2:
+                    Application.Run(new client_chat_room_interface());
+
+                    break;
             }
         }
     }
