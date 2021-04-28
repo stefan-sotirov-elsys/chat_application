@@ -34,6 +34,9 @@ namespace client
                     Application.Run(new client_chat_room_interface());
 
                     break;
+
+                default:
+                    return;
             }
         }
     }
