@@ -56,7 +56,7 @@ namespace server
         void handle_connection(object current_socket)
         {
             byte[] buf = new byte[max_message_size];
-            Message message;
+            Message message = null;
 
             while (true)
             {
@@ -66,13 +66,17 @@ namespace server
                 }
                 catch (Exception exception)
                 {
+                    if (message.room_code != null)
+                    {
+                        chat_rooms[message.room_code].connections.Remove((Socket)current_socket);
+                    }
+
                     Console.WriteLine(exception.Message);
 
                     return;
                 }
 
                 message = Message.byte_array_to_message(buf);
-
                 
                 handle_message(message, (Socket)current_socket);
             }
