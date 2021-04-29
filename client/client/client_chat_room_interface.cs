@@ -29,7 +29,7 @@ namespace client
 
             accepter_thread = new Thread(new ParameterizedThreadStart(accept_messages));
 
-            accepter_thread.Start(1000);
+            accepter_thread.Start(0);
         }
 
         void accept_messages(object thread_sleep_time)

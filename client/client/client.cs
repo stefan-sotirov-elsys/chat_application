@@ -1,6 +1,4 @@
-﻿// TODO(Stefan): manage the visibility of some of the fields
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

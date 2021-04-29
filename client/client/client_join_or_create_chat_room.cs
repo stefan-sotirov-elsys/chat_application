@@ -58,7 +58,7 @@ namespace client
 
                     Global.client.send_message(new_message);
 
-                    received_message = Global.client.accept_message(1000);
+                    received_message = Global.client.accept_message(0);
 
                     if (check_for_errors(received_message))
                     {
@@ -71,7 +71,7 @@ namespace client
                         new_message.content = Global.client.client_name;
                         Global.client.send_message(new_message);
 
-                        received_message = Global.client.accept_message(1000);
+                        received_message = Global.client.accept_message(0);
 
                         if (check_for_errors(received_message))
                         {
