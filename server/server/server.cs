@@ -97,8 +97,12 @@ namespace server
                     }
                     else
                     {
+                        new_message = new Message("success", "chat room has been created: " + message.content, message.content);
+
                         chat_rooms.Add(message.content, new ChatRoom(message.content));
-                        gateway_buffer.Enqueue(new Message("success", "chat room has been created: " + message.content, null));
+                        gateway_buffer.Enqueue(new_message);
+
+                        current_socket.Send(Message.message_to_byte_array(new_message));
                     }
 
                     break;
@@ -106,14 +110,14 @@ namespace server
                 case "join_room":
                     if (chat_rooms.ContainsKey(message.room_code))
                     {
-                        chat_rooms[message.content].connections.Add(current_socket);
+                        chat_rooms[message.room_code].connections.Add(current_socket);
 
-                        new_message = new Message("success", message.content + "joined the room", message.room_code);
+                        new_message = new Message("success", message.content + " joined the room", message.room_code);
                         current_socket.Send(Message.message_to_byte_array(new_message));
                     }
                     else
                     {
-                        new_message = new Message("error", "chat room doesn't exist", null);
+                        new_message = new Message("error", "chat room doesn't exist", message.room_code);
                         current_socket.Send(Message.message_to_byte_array(new_message));
                     }
 
@@ -131,11 +135,11 @@ namespace server
             }
         }
 
-        public Message accept_message()
+        public Message accept_message(int thread_sleep_time) // in milliseconds
         {
             while (gateway_buffer.Count == 0)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(thread_sleep_time);
             }
 
             return gateway_buffer.Dequeue();

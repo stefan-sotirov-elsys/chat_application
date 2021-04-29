@@ -83,6 +83,7 @@ namespace client
             this.Controls.Add(this.text_screen);
             this.Name = "client_chat_room_interface";
             this.Text = "client_chat_room_interface";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.client_chat_room_interface_FormClosing);
             this.Load += new System.EventHandler(this.client_chat_room_interface_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

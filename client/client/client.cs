@@ -16,13 +16,17 @@ namespace client
     {
         public string client_name;
         public string room_code;
+        int max_message_size;
         Socket socket;
         Queue<Message> gateway_buffer; // serves as a communication point between this class and the user interface
+        public bool return_handle; // for the accept function
 
-        public Client()
+        public Client(int max_message_size)
         {
+            this.max_message_size = max_message_size;
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             gateway_buffer = new Queue<Message>();
+            return_handle = false;
         }
 
         public void connect(IPEndPoint remote_end_point)
@@ -48,38 +52,30 @@ namespace client
             socket.Send(Message.message_to_byte_array(new_message));
         }
 
-        public Message receive_message()
+        public void receive_message()
         {
-            byte[] received_bytes = new byte[256];
+            byte[] received_bytes = new byte[max_message_size];
             Message received_message;
 
             socket.Receive(received_bytes);
 
             received_message = Message.byte_array_to_message(received_bytes);
 
-            return received_message;
+            gateway_buffer.Enqueue(received_message);
         }
 
-        public void listen_for_messages()
-        {
-            byte[] received_bytes = new byte[256];
-            Message received_message;
-
-            while (true)
-            {
-                socket.Receive(received_bytes);
-
-                received_message = Message.byte_array_to_message(received_bytes);
-
-                gateway_buffer.Enqueue(received_message);
-            }
-        }
-
-        public Message accept_message()
+        public Message accept_message(int thread_sleep_time) // in milliseconds
         {
             while (gateway_buffer.Count == 0)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(thread_sleep_time);
+            }
+
+            if (return_handle)
+            {
+                return_handle = false;
+
+                return new Message("", "", "");
             }
 
             return gateway_buffer.Dequeue();

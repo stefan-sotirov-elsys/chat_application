@@ -19,64 +19,51 @@ namespace client
             InitializeComponent();
         }
 
+        Thread accepter_thread;
+
         private void client_chat_room_interface_Load(object sender, EventArgs e)
         {
+            Global.next_form = -1;
+
             Control.CheckForIllegalCrossThreadCalls = false;
 
-            Thread thread = new Thread(new ThreadStart(handle_messages));
+            accepter_thread = new Thread(new ParameterizedThreadStart(accept_messages));
 
-            thread.Start();
+            accepter_thread.Start(1000);
         }
 
-        void handle_messages()
+        void accept_messages(object thread_sleep_time)
         {
             while (true)
             {
-                byte[] buf = new byte[256];
-                message.Message received_message;
+                message.Message accepted_message = Global.client.accept_message((int)thread_sleep_time);
 
-                Global.client.socket.Receive(buf);
-
-                received_message = message.Message.byte_array_to_message(buf);
-
-                switch (received_message.type)
+                if (accepted_message.type == "content")
                 {
-                    case "error":
-                        MessageBox.Show(received_message.content);
-
-                        if (received_message.room_name == Global.client.room_code)
-                        {
-                            Global.client.room_code = null;
-                        }
-
-
-
-                        this.Close();
-
-                        break;
-
-                    case "content":
-                        this.text_screen.Text += received_message.content + Environment.NewLine;
-
-                        break;
+                    this.text_screen.Text += accepted_message.content + Environment.NewLine;
                 }
             }
         }
 
         private void submit_content_Click(object sender, EventArgs e)
         {
-            string content = Global.client.client_name + ": " + this.content_input.Text;
+            message.Message new_message = new message.Message("content", Global.client.client_name + ": " + this.content_input.Text, Global.client.room_code);
 
-            message.Message new_message = new message.Message("content", content, Global.client.room_code);
+            Global.client.send_message(new_message);
 
             this.content_input.Clear();
-
-            Global.client.socket.Send(message.Message.message_to_byte_array(new_message));
         }
 
         private void change_room_Click(object sender, EventArgs e)
         {
+            Global.next_form = 1;
+
             this.Close();
+        }
+
+        private void client_chat_room_interface_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            accepter_thread.Abort();
         }
     }
 }

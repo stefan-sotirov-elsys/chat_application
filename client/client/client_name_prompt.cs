@@ -21,20 +21,7 @@ namespace client
 
         private void client_name_prompt_Load(object sender, EventArgs e)
         {
-            IPHostEntry host = Dns.GetHostEntry("localhost"); // note(Stefan): Only for testing
-            IPAddress ip = host.AddressList[1];
-
-            IPEndPoint server_endpoint = new IPEndPoint(ip, 13000);
-
-            try
-            {
-                Global.client.connect(server_endpoint);
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message);
-                this.Close();
-            }
+            Global.next_form = -1;
         }
 
         private void client_name_submit_Click(object sender, EventArgs e)

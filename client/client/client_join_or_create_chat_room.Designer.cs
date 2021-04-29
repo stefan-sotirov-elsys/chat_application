@@ -83,6 +83,7 @@ namespace client
             this.Controls.Add(this.create_room_button);
             this.Name = "client_join_or_create_chat_room";
             this.Text = "client_join_or_create_chat_room";
+            this.Load += new System.EventHandler(this.client_join_or_create_chat_room_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

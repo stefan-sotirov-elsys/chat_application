@@ -20,6 +20,11 @@ namespace client
             InitializeComponent();
         }
 
+        private void client_join_or_create_chat_room_Load(object sender, EventArgs e)
+        {
+            Global.next_form = -1;
+        }
+
         string mode;
 
         private void create_room_button_Click(object sender, EventArgs e)
@@ -48,22 +53,30 @@ namespace client
             {
                 if (mode != null)
                 {
-                    message.Message new_message = new message.Message(mode, Global.client.client_name, this.create_or_join_room_text_box.Text);
+                    message.Message new_message = new message.Message(mode, this.create_or_join_room_text_box.Text, this.create_or_join_room_text_box.Text);
+                    message.Message received_message;
+
                     Global.client.send_message(new_message);
+
+                    received_message = Global.client.accept_message(1000);
+
+                    if (check_for_errors(received_message))
+                    {
+                        return;
+                    }
 
                     if (mode == "create_room")
                     {
                         new_message.type = "join_room";
+                        new_message.content = Global.client.client_name;
                         Global.client.send_message(new_message);
-                    }
 
-                    new_message = Global.client.receive_message();
+                        received_message = Global.client.accept_message(1000);
 
-                    if (new_message.type == "error")
-                    {
-                        MessageBox.Show(new_message.content);
-
-                        this.Close();
+                        if (check_for_errors(received_message))
+                        {
+                            return;
+                        }
                     }
 
                     Global.client.room_code = this.create_or_join_room_text_box.Text;
@@ -81,6 +94,18 @@ namespace client
             {
                 MessageBox.Show("Please insert a room code");
             }
+        }
+
+        bool check_for_errors(message.Message received_message)
+        {
+            if (received_message.type == "error")
+            {
+                MessageBox.Show(received_message.content);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }
