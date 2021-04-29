@@ -26,7 +26,14 @@ namespace server
 
             for (i = 0; i < connections.Count; ++i)
             {
-                connections[i].Send(data);
+                try
+                {
+                    connections[i].Send(data);
+                }
+                catch
+                {
+                    connections.RemoveAt(i);
+                }
             }
         }
     }
