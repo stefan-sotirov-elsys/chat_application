@@ -114,6 +114,8 @@ namespace server
 
                         new_message = new Message("success", message.content + " joined the room", message.room_code);
                         current_socket.Send(Message.message_to_byte_array(new_message));
+
+                        chat_rooms[message.room_code].send_message(new_message);
                     }
                     else
                     {

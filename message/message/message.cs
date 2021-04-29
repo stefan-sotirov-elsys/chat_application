@@ -42,5 +42,7 @@ namespace message
             message = (Message)binary_formatter.Deserialize(memory_stream);
             return message;
         }
+
+        
     }
 }
