@@ -15,7 +15,7 @@ namespace server
         int max_message_size;
         IPEndPoint local_end_point;
         Dictionary<string, ChatRoom> chat_rooms;
-        Queue<Message> gateway_buffer; // serves as a communication point between the interface and this class
+        Queue<Message> gateway_buffer;
 
         public Server(IPAddress server_ip, int port_number, int max_message_size)
         {

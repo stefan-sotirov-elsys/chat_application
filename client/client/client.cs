@@ -16,8 +16,8 @@ namespace client
         public string room_code;
         int max_message_size;
         Socket socket;
-        Queue<Message> gateway_buffer; // serves as a communication point between this class and the user interface
-        public bool return_handle; // for the accept function
+        Queue<Message> gateway_buffer;
+        public bool return_handle;
 
         public Client(int max_message_size)
         {
