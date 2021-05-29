@@ -76,6 +76,13 @@ namespace server
                     return;
                 }
 
+                if (((Socket)current_socket).Poll(1, SelectMode.SelectRead) == false || ((Socket)current_socket).Available == 0)
+                {
+                    Console.WriteLine(((Socket)current_socket).RemoteEndPoint.ToString() + " : process forcibly stopped");
+
+                    return;
+                }
+
                 Message.xor_crypt_bytes(buf);
 
                 message = Message.byte_array_to_message(buf);
