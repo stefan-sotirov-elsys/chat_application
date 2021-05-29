@@ -30,6 +30,7 @@ namespace client
         public void connect(IPEndPoint remote_end_point)
         {
             Message message;
+            byte[] message_bytes;
 
             try
             {
@@ -42,20 +43,26 @@ namespace client
 
             message = new Message("connect", null, null);
 
-            socket.Send(Message.message_to_byte_array(message));
+            send_message(message);
         }
 
         public void send_message(Message new_message)
         {
-            socket.Send(Message.message_to_byte_array(new_message));
-        }
+            byte[] new_message_bytes = Message.message_to_byte_array(new_message);
 
+            Message.xor_crypt_bytes(new_message_bytes);
+
+            socket.Send(new_message_bytes);
+        }
+        
         public void receive_message()
         {
             byte[] received_bytes = new byte[max_message_size];
             Message received_message;
 
             socket.Receive(received_bytes);
+
+            Message.xor_crypt_bytes(received_bytes);
 
             received_message = Message.byte_array_to_message(received_bytes);
 

@@ -76,6 +76,8 @@ namespace server
                     return;
                 }
 
+                Message.xor_crypt_bytes(buf);
+
                 message = Message.byte_array_to_message(buf);
                 
                 handle_message(message, (Socket)current_socket);
@@ -84,7 +86,8 @@ namespace server
 
         void handle_message(Message message, Socket current_socket)
         {
-            Message new_message;
+            Message new_message = null;
+            byte[] new_message_bytes;
 
             switch (message.type)
             {
@@ -97,7 +100,6 @@ namespace server
                     if (chat_rooms.ContainsKey(message.content))
                     {
                         new_message = new Message("error", "chat room already exists", message.content);
-                        current_socket.Send(Message.message_to_byte_array(new_message));
                     }
                     else
                     {
@@ -105,8 +107,6 @@ namespace server
 
                         chat_rooms.Add(message.content, new ChatRoom(message.content));
                         gateway_buffer.Enqueue(new_message);
-
-                        current_socket.Send(Message.message_to_byte_array(new_message));
                     }
 
                     break;
@@ -117,14 +117,12 @@ namespace server
                         chat_rooms[message.room_code].connections.Add(current_socket);
 
                         new_message = new Message("success", message.content + " joined the room", message.room_code);
-                        current_socket.Send(Message.message_to_byte_array(new_message));
 
                         chat_rooms[message.room_code].send_message(new_message);
                     }
                     else
                     {
                         new_message = new Message("error", "chat room doesn't exist", message.room_code);
-                        current_socket.Send(Message.message_to_byte_array(new_message));
                     }
 
                     break;
@@ -136,8 +134,17 @@ namespace server
 
                 case "error":
                     gateway_buffer.Enqueue(new Message("error", "error: " + message.content, null));
-                    
+
                     break;
+            }
+
+            if (message.type != "error" && message.type != "content" && message.type != "connect")
+            {
+                new_message_bytes = Message.message_to_byte_array(new_message);
+
+                Message.xor_crypt_bytes(new_message_bytes);
+
+                current_socket.Send(new_message_bytes);
             }
         }
 

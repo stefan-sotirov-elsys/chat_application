@@ -24,6 +24,8 @@ namespace server
             int i;
             byte[] data = Message.message_to_byte_array(message);
 
+            Message.xor_crypt_bytes(data);
+
             for (i = 0; i < connections.Count; ++i)
             {
                 connections[i].Send(data);

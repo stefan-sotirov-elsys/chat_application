@@ -43,6 +43,14 @@ namespace message
             return message;
         }
 
-        
+        public static void xor_crypt_bytes(byte[] bytes)
+        {
+            int i;
+
+            for (i = 0; i < bytes.Length; i++)
+            {
+                bytes[i] ^= 127;
+            }
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace server
             Thread thread = new Thread(new ParameterizedThreadStart(start_logger));
             IPHostEntry host = Dns.GetHostEntry("localhost");
             IPAddress ip = host.AddressList[1];
-            Server server = new Server(ip, 13000, 256);
+            Server server = new Server(ip, 13000, 1024);
 
             thread.Start(server);
             server.start(100);

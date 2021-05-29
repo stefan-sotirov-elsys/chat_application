@@ -76,7 +76,7 @@ namespace client
 
     static class Global
     {
-        public static Client client = new Client(256);
+        public static Client client = new Client(1024);
         public static int next_form = 0;
     }
 }
