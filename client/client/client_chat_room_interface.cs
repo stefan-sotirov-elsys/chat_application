@@ -40,7 +40,7 @@ namespace client
 
                 if (accepted_message.type == "content")
                 {
-                    this.text_screen.Text += accepted_message.content + Environment.NewLine;
+                    this.text_screen.Text += accepted_message.content;
                 }
             }
         }

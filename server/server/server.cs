@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using message;
+using System.IO;
 
 namespace server
 {
@@ -15,7 +16,7 @@ namespace server
         int max_message_size;
         IPEndPoint local_end_point;
         Dictionary<string, ChatRoom> chat_rooms;
-        Queue<Message> gateway_buffer;
+        Queue<Message> log_buffer;
 
         public Server(IPAddress server_ip, int port_number, int max_message_size)
         {
@@ -29,7 +30,7 @@ namespace server
             this.max_message_size = max_message_size;
             local_end_point = new IPEndPoint(server_ip, port_number);
             chat_rooms = new Dictionary<string, ChatRoom>();
-            gateway_buffer = new Queue<Message>();
+            log_buffer = new Queue<Message>();
         }
 
         public void start(int listener_socket_backlog)
@@ -38,7 +39,7 @@ namespace server
 
             listener_socket.Bind(local_end_point);
 
-            gateway_buffer.Enqueue(new Message("success", "server started successfully", null));
+            log_buffer.Enqueue(new Message("success", "server started successfully", null));
 
             listener_socket.Listen(listener_socket_backlog);
 
@@ -99,33 +100,43 @@ namespace server
             switch (message.type)
             {
                 case "connect":
-                    gateway_buffer.Enqueue(new Message("success", "new connection from " + ((IPEndPoint)(current_socket.RemoteEndPoint)).Address, null));
+                    log_buffer.Enqueue(new Message("success", "new connection from " + ((IPEndPoint)(current_socket.RemoteEndPoint)).Address, null));
 
                     break;
 
                 case "create_room":
-                    if (chat_rooms.ContainsKey(message.content))
+                    if (File.Exists(message.content + ".txt"))
                     {
                         new_message = new Message("error", "chat room already exists", message.content);
                     }
                     else
                     {
+                        File.Create(message.content + ".txt");
+
                         new_message = new Message("success", "chat room has been created: " + message.content, message.content);
 
                         chat_rooms.Add(message.content, new ChatRoom(message.content));
-                        gateway_buffer.Enqueue(new_message);
+
+                        log_buffer.Enqueue(new_message);
                     }
 
                     break;
 
                 case "join_room":
-                    if (chat_rooms.ContainsKey(message.room_code))
+                    if (File.Exists(message.content + ".txt"))
                     {
+                        if (!chat_rooms.ContainsKey(message.room_code))
+                        {
+                            chat_rooms.Add(message.content, new ChatRoom(message.content));
+                        }
+
                         chat_rooms[message.room_code].connections.Add(current_socket);
 
                         new_message = new Message("success", message.content + " joined the room", message.room_code);
 
                         chat_rooms[message.room_code].send_message(new_message);
+
+                        chat_rooms[message.room_code].update(current_socket);
                     }
                     else
                     {
@@ -140,7 +151,7 @@ namespace server
                     break;
 
                 case "error":
-                    gateway_buffer.Enqueue(new Message("error", "error: " + message.content, null));
+                    log_buffer.Enqueue(new Message("error", "error: " + message.content, null));
 
                     break;
             }
@@ -157,12 +168,12 @@ namespace server
 
         public Message accept_message(int thread_sleep_time) // in milliseconds
         {
-            while (gateway_buffer.Count == 0)
+            while (log_buffer.Count == 0)
             {
                 Thread.Sleep(thread_sleep_time);
             }
 
-            return gateway_buffer.Dequeue();
+            return log_buffer.Dequeue();
         }
     }
 }
