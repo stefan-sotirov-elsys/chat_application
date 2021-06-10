@@ -40,7 +40,19 @@ namespace client
 
                 if (accepted_message.type == "content")
                 {
-                    this.text_screen.Text += accepted_message.content;
+                    int i;
+
+                    for (i = 0; i < accepted_message.content.Length; i++)
+                    {
+                        if (accepted_message.content[i] == '\n')
+                        {
+                            this.text_screen.Text += Environment.NewLine;
+                        }
+                        else
+                        {
+                            this.text_screen.Text += accepted_message.content[i];
+                        }
+                    }
                 }
             }
         }

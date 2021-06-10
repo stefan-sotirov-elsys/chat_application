@@ -77,16 +77,18 @@ namespace server
                     return;
                 }
 
-                if (((Socket)current_socket).Poll(1, SelectMode.SelectRead) == false || ((Socket)current_socket).Available == 0)
+                Message.xor_crypt_bytes(buf);
+
+                try
+                {
+                    message = Message.byte_array_to_message(buf);
+                }
+                catch (Exception)
                 {
                     Console.WriteLine(((Socket)current_socket).RemoteEndPoint.ToString() + " : process forcibly stopped");
 
                     return;
                 }
-
-                Message.xor_crypt_bytes(buf);
-
-                message = Message.byte_array_to_message(buf);
                 
                 handle_message(message, (Socket)current_socket);
             }
@@ -105,32 +107,39 @@ namespace server
                     break;
 
                 case "create_room":
-                    if (File.Exists(message.content + ".txt"))
+                    if (File.Exists(message.room_code + ".txt"))
                     {
-                        new_message = new Message("error", "chat room already exists", message.content);
+                        new_message = new Message("error", "chat room already exists", message.room_code);
                     }
                     else
                     {
-                        File.Create(message.content + ".txt");
+                        File.Create(message.room_code + ".txt").Close();
 
-                        new_message = new Message("success", "chat room has been created: " + message.content, message.content);
-
-                        chat_rooms.Add(message.content, new ChatRoom(message.content));
+                        new_message = new Message("success", "chat room has been created: " + message.room_code, message.room_code);
 
                         log_buffer.Enqueue(new_message);
                     }
 
+                    new_message_bytes = Message.message_to_byte_array(new_message);
+
+                    Message.xor_crypt_bytes(new_message_bytes);
+
+                    current_socket.Send(new_message_bytes);
+
                     break;
 
                 case "join_room":
-                    if (File.Exists(message.content + ".txt"))
+                    if (File.Exists(message.room_code + ".txt"))
                     {
                         if (!chat_rooms.ContainsKey(message.room_code))
                         {
-                            chat_rooms.Add(message.content, new ChatRoom(message.content));
+                            chat_rooms.Add(message.room_code, new ChatRoom(message.room_code));
                         }
 
-                        chat_rooms[message.room_code].connections.Add(current_socket);
+                        if (!chat_rooms[message.room_code].connections.Contains(current_socket))
+                        {
+                            chat_rooms[message.room_code].connections.Add(current_socket);
+                        }
 
                         new_message = new Message("success", message.content + " joined the room", message.room_code);
 
@@ -141,6 +150,12 @@ namespace server
                     else
                     {
                         new_message = new Message("error", "chat room doesn't exist", message.room_code);
+
+                        new_message_bytes = Message.message_to_byte_array(new_message);
+
+                        Message.xor_crypt_bytes(new_message_bytes);
+
+                        current_socket.Send(new_message_bytes);
                     }
 
                     break;
@@ -154,15 +169,6 @@ namespace server
                     log_buffer.Enqueue(new Message("error", "error: " + message.content, null));
 
                     break;
-            }
-
-            if (message.type != "error" && message.type != "content" && message.type != "connect")
-            {
-                new_message_bytes = Message.message_to_byte_array(new_message);
-
-                Message.xor_crypt_bytes(new_message_bytes);
-
-                current_socket.Send(new_message_bytes);
             }
         }
 

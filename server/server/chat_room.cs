@@ -25,12 +25,8 @@ namespace server
 
         public void update(Socket connection)
         {
-            Message new_message;
+            Message new_message = new Message("content", null, room_code);
             byte[] content_bytes = new byte[256];
-
-            new_message.type = "content";
-
-            new_message.room_code = room_code;
 
             file.Seek(0, SeekOrigin.Begin);
 
@@ -51,9 +47,18 @@ namespace server
         public void send_message(Message message)
         {
             int i;
-            byte[] data = Message.message_to_byte_array(message);
+            byte[] data;
 
-            file.Write(Encoding.ASCII.GetBytes(message.content));
+            message.content += '\n';
+
+            data = Message.message_to_byte_array(message);
+
+            if (message.type == "content")
+            {
+                file.Write(Encoding.ASCII.GetBytes(message.content), 0, message.content.Length);
+
+                file.Flush();
+            }
 
             Message.xor_crypt_bytes(data);
 

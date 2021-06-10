@@ -30,7 +30,6 @@ namespace client
         public void connect(IPEndPoint remote_end_point)
         {
             Message message;
-            byte[] message_bytes;
 
             try
             {

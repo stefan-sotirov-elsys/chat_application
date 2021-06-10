@@ -53,7 +53,7 @@ namespace client
             {
                 if (mode != null)
                 {
-                    message.Message new_message = new message.Message(mode, this.create_or_join_room_text_box.Text, this.create_or_join_room_text_box.Text);
+                    message.Message new_message = new message.Message(mode, Global.client.client_name, this.create_or_join_room_text_box.Text);
                     message.Message received_message;
 
                     Global.client.send_message(new_message);
@@ -68,7 +68,6 @@ namespace client
                     if (mode == "create_room")
                     {
                         new_message.type = "join_room";
-                        new_message.content = Global.client.client_name;
                         Global.client.send_message(new_message);
 
                         received_message = Global.client.accept_message(0);
