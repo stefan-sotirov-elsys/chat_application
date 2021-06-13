@@ -68,6 +68,7 @@
     <Compile Include="client_join_or_create_chat_room.Designer.cs">
       <DependentUpon>client_join_or_create_chat_room.cs</DependentUpon>
     </Compile>
+    <Compile Include="emoji.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="client_chat_room_interface.resx">

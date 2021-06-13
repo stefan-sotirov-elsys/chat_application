@@ -34,7 +34,7 @@ namespace server
             {
                 byte[] data;
 
-                new_message.content = Encoding.ASCII.GetString(content_bytes);
+                new_message.content = Encoding.Unicode.GetString(content_bytes);
 
                 data = Message.message_to_byte_array(new_message);
 
@@ -55,7 +55,7 @@ namespace server
 
             if (message.type == "content")
             {
-                file.Write(Encoding.ASCII.GetBytes(message.content), 0, message.content.Length);
+                file.Write(Encoding.Unicode.GetBytes(message.content), 0, Encoding.Unicode.GetBytes(message.content).Length);
 
                 file.Flush();
             }
