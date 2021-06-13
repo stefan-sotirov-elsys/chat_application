@@ -42,6 +42,12 @@ namespace client
                 {
                     accepted_message.content = accepted_message.content.Replace("\n", Environment.NewLine);
 
+                    accepted_message.content = accepted_message.content.Replace(":)", Emoji.smile);
+
+                    accepted_message.content = accepted_message.content.Replace(";)", Emoji.wink);
+
+                    accepted_message.content = accepted_message.content.Replace(":(", Emoji.cry);
+
                     this.text_screen.Text += accepted_message.content;
                 }
             }

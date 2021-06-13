@@ -33,6 +33,7 @@ namespace client
             this.join_room_button = new System.Windows.Forms.Button();
             this.create_or_join_room_text_box = new System.Windows.Forms.TextBox();
             this.submit_button = new System.Windows.Forms.Button();
+            this.change_user_button = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // create_room_button
@@ -72,11 +73,22 @@ namespace client
             this.submit_button.UseVisualStyleBackColor = true;
             this.submit_button.Click += new System.EventHandler(this.submit_button_Click);
             // 
+            // change_user_button
+            // 
+            this.change_user_button.Location = new System.Drawing.Point(12, 12);
+            this.change_user_button.Name = "change_user_button";
+            this.change_user_button.Size = new System.Drawing.Size(98, 23);
+            this.change_user_button.TabIndex = 4;
+            this.change_user_button.Text = "change user";
+            this.change_user_button.UseVisualStyleBackColor = true;
+            this.change_user_button.Click += new System.EventHandler(this.change_user_button_Click);
+            // 
             // client_join_or_create_chat_room
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(496, 217);
+            this.Controls.Add(this.change_user_button);
             this.Controls.Add(this.submit_button);
             this.Controls.Add(this.create_or_join_room_text_box);
             this.Controls.Add(this.join_room_button);
@@ -95,5 +107,6 @@ namespace client
         private System.Windows.Forms.Button join_room_button;
         private System.Windows.Forms.TextBox create_or_join_room_text_box;
         private System.Windows.Forms.Button submit_button;
+        private System.Windows.Forms.Button change_user_button;
     }
 }
